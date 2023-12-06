@@ -1,6 +1,7 @@
 from copy import deepcopy
 from math import prod
 from itertools import zip_longest
+from random import choices
 
 def __remove_zeros(nu):
     if nu[-1] == 0:
@@ -79,6 +80,20 @@ def __which_row(T, x):
         i = i + 1
         ok = x in T[i]
     return i
+
+def __connected_partitions(nu0):
+    nu = deepcopy(nu0)
+    nu[0] = nu[0] + 1
+    out = [nu]
+    for i in range(1, len(nu0)):
+        if nu0[i] < nu0[i-1]:
+            nu = deepcopy(nu0)
+            nu[i] = nu[i] + 1
+            out.append(nu)
+    nu = deepcopy(nu0)
+    nu.append(1)
+    out.append(nu)
+    return out
 
 def __ballot2syt(ballot):
     syt = []
@@ -354,12 +369,12 @@ def syt_to_young_path(syt):
     Returns
     -------
     list
-        A path of the Young graph starting from `[1]`.
+        A path of the Young graph, starting from `[1]`.
 
     Examples
     --------
     >>> from pysyt.syt import syt_to_young_path
-    >>> syt_to_young_path_to_syt([[1,2,4], [3], [5]])
+    >>> syt_to_young_path([[1,2,4], [3], [5]])
 
     """
     if not __is_syt(syt):
@@ -375,3 +390,11 @@ def syt_to_young_path(syt):
         part[i] = part[i] + 1
         path.append(part)
     return list(map(__remove_zeros, path))
+
+def random_young_path(n):
+    path = [[1]]
+    for i in range(n-1):
+        partitions = __connected_partitions(path[i])
+        weights = list(map(count_sytx, partitions))
+        path.append(choices(partitions, weights, k=1)[0])
+    return path
