@@ -263,3 +263,54 @@ def dual_syt(T):
     if not __is_syt(T):
         raise Exception("Not a standard Young tableau.")
     return __dual_syt(T)
+
+def young_path_to_syt(path):
+    path1 = list(map(__check_partition, path))
+    check0 = sum(path1[0]) == 1
+    N = len(path1)
+    i = 1
+    while i < N and check0:
+        check0 = sum(path1[i]) == i + 1
+        i = i + 1
+    if not check0:
+        raise Exception("Invalid path. The n-th element of the path must be a partition of n.")
+    if N == 1:
+        return [[1]]
+    weights = list(map(len, path1))
+    b = weights[1] - weights[0]
+    check1 = b == 0 or b == 1
+    i = 2
+    while i < N and check1:
+        b = weights[i] - weights[i-1]
+        check1 = b == 0 or b == 1
+        i = i + 1
+    if not check1:
+        raise Exception("Invalid path.")
+    l = len(path1[-1])
+    path2 = []
+    for i in range(N):
+        p = deepcopy(path1[i])
+        li = len(p)
+        for i in range(l-li):
+            p.append(0)
+        path2.append(p)
+    tpath2 = list(map(list, zip(*path2)))
+    diffs = list(map(__diff, tpath2))
+    tdiffs = list(map(list, zip(*diffs)))
+    check2 = True
+    i = 0
+    while check2 and i < N-1:
+        d = tdiffs[i]
+        check2 = sum(d) == 1
+        j = 0
+        while check2 and j < l:
+            check2 = d[j] == 0 or d[j] == 1
+            j = j + 1
+        i = i + 1
+    if not check2:
+        raise Exception("Invalid path.")
+    syt = [[] for i in range(l)]
+    syt[0] = [1]
+    for i in range(N-1):
+        idx = tdiffs[i].index(1)
+        syt[idx].append(i+2)
