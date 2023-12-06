@@ -4,7 +4,7 @@ from itertools import zip_longest
 
 def __remove_zeros(nu):
     if nu[-1] == 0:
-        k = nu.index(0) + 1
+        k = nu.index(0)
         nu = [nu[i] for i in range(k)]
     return nu
 
@@ -71,6 +71,14 @@ def __is_syt(T):
     c3 = __check_syt_rows(T)
     c4 = __check_syt_rows(__dual_syt(T))
     return all([c1, c2, c3, c4])
+
+def __which_row(T, x):
+    i = 0
+    ok = x in T[i]
+    while not ok:
+        i = i + 1
+        ok = x in T[i]
+    return i
 
 def __ballot2syt(ballot):
     syt = []
@@ -333,3 +341,18 @@ def young_path_to_syt(path):
     for i in range(N-1):
         idx = tdiffs[i].index(1)
         syt[idx].append(i+2)
+
+def syt_to_young_path(syt):
+    if not __is_syt(syt):
+        raise Exception("Not a standard Young tableau.")
+    N = sum(list(map(len, syt)))
+    path = []
+    part = [0 for i in range(len(syt))]
+    part[0] = 1
+    path.append(part)
+    for k in range(1, N):
+        part = deepcopy(path[k-1])
+        i = __which_row(syt, k+1)
+        part[i] = part[i] + 1
+        path.append(part)
+    return list(map(__remove_zeros, path))
