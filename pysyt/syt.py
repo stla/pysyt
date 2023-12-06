@@ -392,6 +392,25 @@ def syt_to_young_path(syt):
     return list(map(__remove_zeros, path))
 
 def random_young_path(n):
+    """
+    Young path at random according to the Plancherel growth process.
+
+    Parameters
+    ----------
+    n : integer
+        Size of the path.
+
+    Returns
+    -------
+    list
+        A path of the Young graph, starting from `[1]`.
+
+    Examples
+    --------
+    >>> from pysyt.syt import random_young_path
+    >>> random_young_path(6)
+
+    """
     path = [[1]]
     for i in range(n-1):
         partitions = __connected_partitions(path[i])
