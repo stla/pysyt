@@ -343,6 +343,25 @@ def young_path_to_syt(path):
         syt[idx].append(i+2)
 
 def syt_to_young_path(syt):
+    """
+    Young path corresponding to a standard Young tableau.
+
+    Parameters
+    ----------
+    syt : list
+        A standard Young tableau.
+
+    Returns
+    -------
+    list
+        A path of the Young graph starting from `[1]`.
+
+    Examples
+    --------
+    >>> from pysyt.syt import syt_to_young_path
+    >>> syt_to_young_path_to_syt([[1,2,4], [3], [5]])
+
+    """
     if not __is_syt(syt):
         raise Exception("Not a standard Young tableau.")
     N = sum(list(map(len, syt)))
