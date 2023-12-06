@@ -265,6 +265,25 @@ def dual_syt(T):
     return __dual_syt(T)
 
 def young_path_to_syt(path):
+    """
+    Standard Young tableau corresponding to a path on the Young graph.
+
+    Parameters
+    ----------
+    path : list of integer partitions
+        A path on the Young graph, starting from `[1]`.
+
+    Returns
+    -------
+    list
+        A standard Young tableau.
+
+    Examples
+    --------
+    >>> from pysyt.syt import young_path_to_syt
+    >>> young_path_to_syt([[1], [2], [2,1], [3,1], [3,1,1]])
+
+    """
     path1 = list(map(__check_partition, path))
     check0 = sum(path1[0]) == 1
     N = len(path1)
