@@ -28,8 +28,8 @@ def __unlist(L):
 def __conjugate(nu):
     l = len(nu)
     mu = [l]
-    if l > 1:
-        for i in range(1, nu[1]+1):
+    if l >= 1:
+        for i in range(1, nu[0]):
             mu.append(0)
             j = 0
             while j < len(nu) and nu[j] > i:
